@@ -20,13 +20,19 @@ function logger(req, res, next) {
 }
 
 function gateKeeper(req, res, next) {
-  const password = req.headers.password;
+  const password = req.headers.password || '';
+
+  if (password.toLowerCase() === 'melon') {
+    next();
+  } else {
+    res.status(400).json({ you: 'cannot pass!' });
+  }
 }
 
 // Global Middleware * Runs on every request
 server.use(helmet()); // third party
-
 server.use(express.json());
+server.use(gateKeeper);
 server.use(dateLogger);
 server.use(logger);
 server.use(morgan('dev'));
