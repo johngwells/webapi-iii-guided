@@ -22,10 +22,14 @@ function logger(req, res, next) {
 function gateKeeper(req, res, next) {
   const password = req.headers.password || '';
 
-  if (password.toLowerCase() === 'melon') {
-    next();
+  if (password) {
+    if (password.toLowerCase() === 'melon') {
+      next();
+    } else {
+      res.status(400).json({ you: 'cannot pass!' });
+    }
   } else {
-    res.status(400).json({ you: 'cannot pass!' });
+    res.status(400).json({ error: 'no password was provided' });
   }
 }
 
